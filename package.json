@@ -5,16 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "test:watch": "vitest"
   },
-  "homepage": "https://github.com/ahmsaied/portfolio/",
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
     "@icons-pack/react-simple-icons": "^13.11.1",

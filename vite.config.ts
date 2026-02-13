@@ -12,7 +12,10 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
   },
-  plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
+  plugins: [react(), mode === "development" && componentTagger()].filter(
+    Boolean,
+  ),
+  base: "https://github.com/ahmsaied/portfolio",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

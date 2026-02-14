@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Github, Linkedin, Mail, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SiStackoverflow } from "@icons-pack/react-simple-icons";
+import { SiStackoverflow, SiMedium } from "@icons-pack/react-simple-icons";
 
 const socials = [
   { icon: Github, href: "https://github.com/ahmsaied", label: "GitHub" },
@@ -14,6 +14,11 @@ const socials = [
     icon: SiStackoverflow,
     href: "https://stackoverflow.com/users/9513914/ahmed-saied",
     label: "StackOverflow",
+  },
+  {
+    icon: SiMedium,
+    href: "https://medium.com/@ahm.saied",
+    label: "Medium",
   },
   { icon: Mail, href: "mailto:eng.ahm.saied@gmail.com", label: "Email" },
 ];

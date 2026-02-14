@@ -13,7 +13,7 @@ const About = () => (
         <div className="w-16 h-1 bg-primary rounded-full mb-8" />
         <div className="glass rounded-2xl p-8 space-y-4 text-secondary-foreground leading-relaxed">
           <p>
-            <strong className="text-foreground">Over the past decade,</strong>
+            <strong className="text-foreground">Over the past decade, </strong>
             my journey into software grew naturally from my work in telecom
             operations, where I was constantly driven to automate processes,
             build internal tools, and improve system reliability. What began as

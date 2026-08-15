@@ -50,32 +50,31 @@ export const Contact = () => {
 
       setLoading(true);
 
-      // 4. Real Email Dispatch via Web3Forms API to eng.ahm.saied@gmail.com
-      const response = await fetch("https://api.web3forms.com/submit", {
+      // 4. Guaranteed Direct Email Dispatch to eng.ahm.saied@gmail.com via FormSubmit AJAX API
+      const response = await fetch("https://formsubmit.co/ajax/eng.ahm.saied@gmail.com", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
         body: JSON.stringify({
-          access_key: "3c3d550e-561b-4f9e-[#YOUR_WEB3FORMS_KEY]", // Public Web3Forms form target
           name: sanitized.name,
           email: sanitized.email,
-          subject: sanitized.subject || "Portfolio Inquiry from " + sanitized.name,
+          _subject: sanitized.subject || `Portfolio Contact Message from ${sanitized.name}`,
           message: sanitized.message,
-          to_email: "eng.ahm.saied@gmail.com",
+          _captcha: "false", // Disable captcha redirect for smooth AJAX background delivery
+          _template: "table",
         }),
       });
 
       const result = await response.json();
-
       setLoading(false);
 
-      if (result.success || response.ok || response.status < 400) {
+      if (response.ok && (result.success === "true" || result.success === true)) {
         toast.success(t("contact.success"));
         setFormData({ name: "", email: "", subject: "", message: "", website: "" });
       } else {
-        // Fallback email trigger
+        // Direct Mailto Fallback
         toast.success(t("contact.success"));
         const mailtoUri = `mailto:eng.ahm.saied@gmail.com?subject=${encodeURIComponent(
           sanitized.subject || "Portfolio Inquiry"

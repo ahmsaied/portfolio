@@ -11,33 +11,36 @@ import Contact from "@/components/portfolio/Contact";
 import Footer from "@/components/portfolio/Footer";
 import { ParticleBackground } from "@/components/portfolio/ParticleBackground";
 import { CursorGlow } from "@/components/portfolio/CursorGlow";
+import { LanguageProvider } from "@/context/LanguageContext";
 import { Toaster } from "sonner";
 
 const Index = () => (
-  <main className="min-h-screen bg-[#0a0d14] text-slate-100 relative overflow-hidden grid-pattern selection:bg-cyan-500/30 selection:text-cyan-200">
-    {/* Ambient Cursor Glow Tracker */}
-    <CursorGlow />
+  <LanguageProvider>
+    <main className="min-h-screen bg-[#0a0d14] text-slate-100 relative overflow-hidden grid-pattern selection:bg-cyan-500/30 selection:text-cyan-200 transition-all duration-300">
+      {/* Ambient Cursor Glow Tracker */}
+      <CursorGlow />
 
-    {/* Canvas Constellation Particle System */}
-    <ParticleBackground />
+      {/* Canvas Constellation Particle System */}
+      <ParticleBackground />
 
-    {/* Toast Notifications */}
-    <Toaster position="bottom-right" theme="dark" />
+      {/* Toast Notifications */}
+      <Toaster position="bottom-right" theme="dark" />
 
-    {/* Content Sections */}
-    <div className="relative z-10">
-      <Navbar />
-      <Hero />
-      <About />
-      <Skills />
-      <Services />
-      <Projects />
-      <Experience />
-      <Certificates />
-      <Contact />
-      <Footer />
-    </div>
-  </main>
+      {/* Content Sections */}
+      <div className="relative z-10">
+        <Navbar />
+        <Hero />
+        <About />
+        <Skills />
+        <Services />
+        <Projects />
+        <Experience />
+        <Certificates />
+        <Contact />
+        <Footer />
+      </div>
+    </main>
+  </LanguageProvider>
 );
 
 export default Index;

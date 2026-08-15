@@ -1,62 +1,63 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, Github, Linkedin, Send, MessageSquare, Sparkles } from "lucide-react";
-import { SiStackoverflow, SiMedium } from "@icons-pack/react-simple-icons";
+import { Mail, Phone, Github, Linkedin, Send, ShieldAlert, ShieldCheck, Lock } from "lucide-react";
 import { SpotlightCard } from "./SpotlightCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-
-const contactMethods = [
-  {
-    icon: Mail,
-    label: "Email",
-    value: "eng.ahm.saied@gmail.com",
-    href: "mailto:eng.ahm.saied@gmail.com",
-  },
-  {
-    icon: Phone,
-    label: "Phone / WhatsApp",
-    value: "+20 100 265 2078",
-    href: "https://wa.me/201002652078",
-  },
-  {
-    icon: Github,
-    label: "GitHub",
-    value: "github.com/ahmsaied",
-    href: "https://github.com/ahmsaied",
-  },
-  {
-    icon: Linkedin,
-    label: "LinkedIn",
-    value: "linkedin.com/in/ahmsaied",
-    href: "https://www.linkedin.com/in/ahmsaied/",
-  },
-];
+import { sanitizeInput, ContactFormSchema, checkRateLimit } from "@/lib/security";
+import { SecureInject } from "./SecureInject";
+import { useLanguage } from "@/context/LanguageContext";
 
 export const Contact = () => {
+  const { t, language } = useLanguage();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "",
     message: "",
+    website: "", // Honeypot trap
   });
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) {
-      toast.error("Please fill in all required fields.");
+
+    // 1. Honeypot check
+    if (formData.website) {
+      toast.error("Bot activity detected.");
       return;
     }
 
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      toast.success("Thank you! Your message has been sent successfully.");
-      setFormData({ name: "", email: "", subject: "", message: "" });
-    }, 1000);
+    // 2. Client-side Rate Limiting
+    if (!checkRateLimit()) {
+      toast.error(t("contact.rateLimit"));
+      return;
+    }
+
+    // 3. OWASP Input Sanitization & Zod Schema Validation
+    try {
+      const sanitized = {
+        name: sanitizeInput(formData.name),
+        email: sanitizeInput(formData.email),
+        subject: sanitizeInput(formData.subject),
+        message: sanitizeInput(formData.message),
+        website: formData.website,
+      };
+
+      ContactFormSchema.schema.parse(sanitized);
+
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        toast.success(t("contact.success"));
+        setFormData({ name: "", email: "", subject: "", message: "", website: "" });
+      }, 1000);
+    } catch (err: any) {
+      const issue = err?.errors?.[0]?.message || t("contact.xssAlert");
+      toast.error(`Security Alert: ${issue}`);
+    }
   };
 
   return (
@@ -73,18 +74,18 @@ export const Contact = () => {
           className="text-center mb-16"
         >
           <div className="font-mono text-cyan-400 text-xs tracking-[0.3em] uppercase mb-2">
-            // 07. GET IN TOUCH
+            {t("tag.contact")}
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight">
-            Let's Build Something <span className="gradient-text-blue-cyan">Intelligent</span>
+            {t("contact.title")}
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full mx-auto mt-4" />
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-          {/* Left Column: Direct Links */}
+          {/* Left Column: Direct Links (Obfuscated against Scrapers) */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: language === "ar" ? 30 : -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
@@ -92,40 +93,78 @@ export const Contact = () => {
           >
             <SpotlightCard className="p-8">
               <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                <MessageSquare size={22} className="text-cyan-400" />
-                Direct Communication
+                <Lock size={22} className="text-cyan-400" />
+                {t("contact.direct")}
               </h3>
               <p className="text-slate-400 text-sm leading-relaxed mb-6">
-                Have an AI project, Flutter mobile app, or enterprise backend solution in mind? Reach out directly via email or messaging!
+                Protected against automated web scrapers. Click below to dynamically interact.
               </p>
 
               <div className="space-y-3">
-                {contactMethods.map((method) => (
-                  <a
-                    key={method.label}
-                    href={method.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-4 p-3.5 rounded-xl border border-white/10 bg-[#0a0d14]/70 hover:bg-cyan-950/30 hover:border-cyan-500/40 transition-all group"
-                  >
-                    <div className="p-2.5 rounded-lg bg-cyan-500/10 text-cyan-400 group-hover:scale-110 transition-transform">
-                      <method.icon size={20} />
-                    </div>
-                    <div className="overflow-hidden">
-                      <p className="text-xs font-mono text-slate-400">{method.label}</p>
-                      <p className="text-sm font-semibold text-white group-hover:text-cyan-300 transition-colors truncate">
-                        {method.value}
-                      </p>
-                    </div>
-                  </a>
-                ))}
+                {/* Email Item - Obfuscated JS Injection */}
+                <div className="flex items-center gap-4 p-3.5 rounded-xl border border-white/10 bg-[#0a0d14]/70 hover:bg-cyan-950/30 hover:border-cyan-500/40 transition-all group">
+                  <div className="p-2.5 rounded-lg bg-cyan-500/10 text-cyan-400">
+                    <Mail size={20} />
+                  </div>
+                  <div className="overflow-hidden">
+                    <p className="text-xs font-mono text-slate-400">Encrypted Email</p>
+                    <SecureInject type="email" className="text-sm font-semibold text-white hover:text-cyan-300 transition-colors" />
+                  </div>
+                </div>
+
+                {/* Phone Item - Obfuscated JS Injection */}
+                <div className="flex items-center gap-4 p-3.5 rounded-xl border border-white/10 bg-[#0a0d14]/70 hover:bg-cyan-950/30 hover:border-cyan-500/40 transition-all group">
+                  <div className="p-2.5 rounded-lg bg-cyan-500/10 text-cyan-400">
+                    <Phone size={20} />
+                  </div>
+                  <div className="overflow-hidden">
+                    <p className="text-xs font-mono text-slate-400">Encrypted Phone / WhatsApp</p>
+                    <SecureInject type="phone" className="text-sm font-semibold text-white hover:text-cyan-300 transition-colors" />
+                  </div>
+                </div>
+
+                {/* GitHub */}
+                <a
+                  href="https://github.com/ahmsaied"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-4 p-3.5 rounded-xl border border-white/10 bg-[#0a0d14]/70 hover:bg-cyan-950/30 hover:border-cyan-500/40 transition-all group"
+                >
+                  <div className="p-2.5 rounded-lg bg-cyan-500/10 text-cyan-400 group-hover:scale-110 transition-transform">
+                    <Github size={20} />
+                  </div>
+                  <div className="overflow-hidden">
+                    <p className="text-xs font-mono text-slate-400">GitHub</p>
+                    <p className="text-sm font-semibold text-white group-hover:text-cyan-300 transition-colors truncate">
+                      github.com/ahmsaied
+                    </p>
+                  </div>
+                </a>
+
+                {/* LinkedIn */}
+                <a
+                  href="https://www.linkedin.com/in/ahmsaied/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-4 p-3.5 rounded-xl border border-white/10 bg-[#0a0d14]/70 hover:bg-cyan-950/30 hover:border-cyan-500/40 transition-all group"
+                >
+                  <div className="p-2.5 rounded-lg bg-cyan-500/10 text-cyan-400 group-hover:scale-110 transition-transform">
+                    <Linkedin size={20} />
+                  </div>
+                  <div className="overflow-hidden">
+                    <p className="text-xs font-mono text-slate-400">LinkedIn</p>
+                    <p className="text-sm font-semibold text-white group-hover:text-cyan-300 transition-colors truncate">
+                      linkedin.com/in/ahmsaied
+                    </p>
+                  </div>
+                </a>
               </div>
             </SpotlightCard>
           </motion.div>
 
-          {/* Right Column: Contact Form */}
+          {/* Right Column: OWASP Sanitized Contact Form */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: language === "ar" ? -30 : 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
@@ -133,51 +172,75 @@ export const Contact = () => {
           >
             <SpotlightCard className="p-8">
               <form onSubmit={handleSubmit} className="space-y-5">
-                <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                  <Sparkles size={20} className="text-cyan-400" />
-                  Send a Message
-                </h3>
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                    <ShieldCheck size={22} className="text-cyan-400" />
+                    {t("contact.formTitle")}
+                  </h3>
+                  <span className="text-[11px] font-mono px-2.5 py-1 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-800">
+                    OWASP XSS Protected
+                  </span>
+                </div>
+
+                {/* Honeypot hidden bot field */}
+                <input
+                  type="text"
+                  name="website"
+                  value={formData.website}
+                  onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                  style={{ display: "none" }}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-mono text-slate-300">Your Name *</label>
+                    <label className="text-xs font-mono text-slate-300">{t("contact.nameLabel")}</label>
                     <Input
                       placeholder="e.g. John Doe"
                       value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
                       className="bg-[#0a0d14]/80 border-white/10 text-white placeholder:text-slate-500 focus:border-cyan-400 rounded-xl"
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-xs font-mono text-slate-300">Your Email *</label>
+                    <label className="text-xs font-mono text-slate-300">{t("contact.emailLabel")}</label>
                     <Input
                       type="email"
                       placeholder="e.g. john@example.com"
                       value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
                       className="bg-[#0a0d14]/80 border-white/10 text-white placeholder:text-slate-500 focus:border-cyan-400 rounded-xl"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono text-slate-300">Subject</label>
+                  <label className="text-xs font-mono text-slate-300">{t("contact.subjectLabel")}</label>
                   <Input
                     placeholder="Project Inquiry / Opportunity"
                     value={formData.subject}
-                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, subject: e.target.value })
+                    }
                     className="bg-[#0a0d14]/80 border-white/10 text-white placeholder:text-slate-500 focus:border-cyan-400 rounded-xl"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono text-slate-300">Message *</label>
+                  <label className="text-xs font-mono text-slate-300">{t("contact.messageLabel")}</label>
                   <Textarea
                     rows={4}
-                    placeholder="Tell me about your project or technical goals..."
+                    placeholder="Tell me about your project..."
                     value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, message: e.target.value })
+                    }
                     className="bg-[#0a0d14]/80 border-white/10 text-white placeholder:text-slate-500 focus:border-cyan-400 rounded-xl resize-none"
                   />
                 </div>
@@ -188,10 +251,10 @@ export const Contact = () => {
                   className="w-full rounded-xl bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-400 text-white font-bold py-6 hover:from-blue-500 hover:to-cyan-400 shadow-[0_0_25px_rgba(6,182,212,0.35)] transition-all border border-cyan-400/40"
                 >
                   {loading ? (
-                    <span className="font-mono text-sm">Sending...</span>
+                    <span className="font-mono text-sm">{t("contact.sending")}</span>
                   ) : (
                     <span className="flex items-center justify-center gap-2">
-                      Send Message
+                      {t("contact.submitBtn")}
                       <Send size={18} />
                     </span>
                   )}

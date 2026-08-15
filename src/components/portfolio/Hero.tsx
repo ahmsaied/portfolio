@@ -10,15 +10,13 @@ import {
   Server,
   ArrowRight,
   Radio,
-  Sparkles,
-  Brain,
-  Code2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SiStackoverflow, SiMedium, SiPython, SiFlutter, SiDotnet, SiDocker } from "@icons-pack/react-simple-icons";
+import { SiStackoverflow, SiMedium } from "@icons-pack/react-simple-icons";
 import { TiltCard } from "./TiltCard";
 import { TypewriterText } from "./TypewriterText";
 import { BorderBeam } from "./BorderBeam";
+import { useLanguage } from "@/context/LanguageContext";
 
 const socials = [
   { icon: Github, href: "https://github.com/ahmsaied", label: "GitHub" },
@@ -40,14 +38,21 @@ const socials = [
   { icon: Mail, href: "mailto:eng.ahm.saied@gmail.com", label: "Email" },
 ];
 
-const typewriterPhrases = [
-  "AI Engineer — Generative & Agentic AI",
-  "Flutter & .NET Full-Stack Developer",
-  "Telecom Infrastructure Specialist",
-  "LLM Agent & RAG Pipeline Developer",
-];
-
 export const Hero = () => {
+  const { t, language } = useLanguage();
+
+  const typewriterPhrases = language === "ar" ? [
+    "مهندس ذكاء اصطناعي — Generative & Agentic AI",
+    "مطور تطبيقات Flutter و .NET Full-Stack",
+    "خبير هندسة الاتصالات والبنية التحتية",
+    "مطور أنظمة LLM & RAG Pipelines",
+  ] : [
+    "AI Engineer — Generative & Agentic AI",
+    "Flutter & .NET Full-Stack Developer",
+    "Telecom Infrastructure Specialist",
+    "LLM Agent & RAG Pipeline Developer",
+  ];
+
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-28 pb-20 overflow-hidden">
       {/* Background Radial Glow Orbs */}
@@ -58,7 +63,7 @@ export const Hero = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Column: Headline & Intro */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: language === "ar" ? 30 : -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="lg:col-span-7 text-center lg:text-left"
@@ -69,12 +74,12 @@ export const Hero = () => {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-400"></span>
               </span>
-              AVAILABLE FOR AI & FULL-STACK PROJECTS
+              {t("hero.badge")}
             </div>
 
             {/* Name Header */}
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-4">
-              Ahmed <span className="gradient-text-blue-cyan">Khedr</span>
+              {t("hero.name")} <span className="gradient-text-blue-cyan">Khedr</span>
             </h1>
 
             {/* Dynamic Typewriter Title Subheading */}
@@ -87,7 +92,7 @@ export const Hero = () => {
 
             {/* Short Bio */}
             <p className="text-slate-400 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-8 font-normal">
-              Architecting autonomous AI Agent networks, RAG vector retrieval pipelines, & enterprise systems. Experienced Flutter & .NET Full-Stack Developer backed by 14+ years of telecom operations engineering.
+              {t("hero.bio")}
             </p>
 
             {/* Glow CTA Buttons */}
@@ -98,7 +103,7 @@ export const Hero = () => {
                 className="rounded-full bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-400 text-white font-semibold shadow-[0_0_30px_rgba(6,182,212,0.35)] hover:shadow-[0_0_40px_rgba(6,182,212,0.55)] hover:scale-[1.02] transition-all border border-cyan-300/40 px-7"
               >
                 <a href="#projects" className="flex items-center gap-2">
-                  View Featured Projects
+                  {t("hero.projectsBtn")}
                   <ArrowRight size={18} />
                 </a>
               </Button>
@@ -115,7 +120,7 @@ export const Hero = () => {
                   className="flex items-center gap-2"
                 >
                   <FileText size={18} className="text-cyan-400" />
-                  Download Resume
+                  {t("hero.resumeBtn")}
                 </a>
               </Button>
             </div>

@@ -1,28 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import { Menu, X, ArrowUpRight, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-const navLinks = [
-  { name: "About", href: "#about" },
-  { name: "Skills", href: "#skills" },
-  { name: "Services", href: "#services" },
-  { name: "Projects", href: "#projects" },
-  { name: "Experience", href: "#experience" },
-  { name: "Certificates", href: "#certificates" },
-  { name: "Contact", href: "#contact" },
-];
+import { useLanguage } from "@/context/LanguageContext";
 
 export const Navbar = () => {
+  const { language, toggleLanguage, t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
+
+  const navLinks = [
+    { name: t("nav.about"), href: "#about", id: "about" },
+    { name: t("nav.skills"), href: "#skills", id: "skills" },
+    { name: t("nav.services"), href: "#services", id: "services" },
+    { name: t("nav.projects"), href: "#projects", id: "projects" },
+    { name: t("nav.experience"), href: "#experience", id: "experience" },
+    { name: t("nav.certificates"), href: "#certificates", id: "certificates" },
+    { name: t("nav.contact"), href: "#contact", id: "contact" },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
 
-      const sections = navLinks.map((link) => link.href.substring(1));
+      const sections = ["about", "skills", "services", "projects", "experience", "certificates", "contact"];
       const scrollPos = window.scrollY + 200;
 
       for (const section of sections) {
@@ -64,13 +66,13 @@ export const Navbar = () => {
             />
           </a>
 
-          {/* Desktop Nav */}
+          {/* Desktop Nav Links */}
           <nav className="hidden lg:flex items-center gap-1 rounded-full border border-white/10 bg-[#0d111a]/60 backdrop-blur-md px-4 py-1.5 shadow-inner">
             {navLinks.map((link) => {
-              const isActive = activeSection === link.href.substring(1);
+              const isActive = activeSection === link.id;
               return (
                 <a
-                  key={link.name}
+                  key={link.id}
                   href={link.href}
                   className={`relative px-3.5 py-1.5 text-xs font-medium transition-colors ${
                     isActive
@@ -91,28 +93,46 @@ export const Navbar = () => {
             })}
           </nav>
 
-          {/* Right Action */}
+          {/* Right Actions: Language Switcher & CTA */}
           <div className="hidden sm:flex items-center gap-3">
+            {/* Language Switcher Button */}
+            <button
+              onClick={toggleLanguage}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/10 bg-[#0d111a]/80 text-xs font-mono text-cyan-300 hover:border-cyan-500/40 hover:text-white transition-all shadow-sm"
+              title="Switch Language / تغيير اللغة"
+            >
+              <Globe size={14} className="text-cyan-400" />
+              <span>{language === "en" ? "العربية" : "English"}</span>
+            </button>
+
             <Button
               size="sm"
               asChild
               className="rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-medium hover:from-blue-500 hover:to-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.3)] transition-all border border-cyan-400/30"
             >
               <a href="#contact" className="flex items-center gap-1.5 text-xs">
-                Let's Talk
+                {t("nav.talk")}
                 <ArrowUpRight size={14} />
               </a>
             </Button>
           </div>
 
           {/* Mobile Menu Toggle */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2.5 rounded-xl border border-white/10 bg-[#0d111a]/80 text-slate-300 hover:text-cyan-400 transition-colors"
-            aria-label="Toggle Menu"
-          >
-            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+          <div className="flex sm:hidden items-center gap-2">
+            <button
+              onClick={toggleLanguage}
+              className="px-2.5 py-1.5 rounded-xl border border-white/10 bg-[#0d111a]/80 text-xs font-mono text-cyan-300"
+            >
+              {language === "en" ? "AR" : "EN"}
+            </button>
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2.5 rounded-xl border border-white/10 bg-[#0d111a]/80 text-slate-300 hover:text-cyan-400 transition-colors"
+              aria-label="Toggle Menu"
+            >
+              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -128,7 +148,7 @@ export const Navbar = () => {
             <div className="container mx-auto px-4 py-6 flex flex-col gap-3">
               {navLinks.map((link) => (
                 <a
-                  key={link.name}
+                  key={link.id}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
                   className="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:text-cyan-400 hover:bg-cyan-500/10 border border-transparent hover:border-cyan-500/20 transition-all flex items-center justify-between"
@@ -137,14 +157,21 @@ export const Navbar = () => {
                   <span className="font-mono text-xs text-cyan-500/60">→</span>
                 </a>
               ))}
-              <div className="pt-4 border-t border-white/10 mt-2">
+              <div className="pt-4 border-t border-white/10 mt-2 flex flex-col gap-3">
+                <button
+                  onClick={toggleLanguage}
+                  className="w-full py-2.5 rounded-xl border border-white/10 bg-[#0d111a] text-xs font-mono text-cyan-300 flex items-center justify-center gap-2"
+                >
+                  <Globe size={16} />
+                  <span>{language === "en" ? "تغيير للغة العربية" : "Switch to English"}</span>
+                </button>
                 <Button
                   className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-medium hover:from-blue-500 hover:to-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.3)]"
                   asChild
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <a href="#contact" className="flex items-center justify-center gap-2">
-                    Let's Connect
+                    {t("nav.talk")}
                     <ArrowUpRight size={16} />
                   </a>
                 </Button>

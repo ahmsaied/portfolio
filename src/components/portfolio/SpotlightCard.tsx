@@ -1,11 +1,14 @@
 import React, { useState, useRef } from "react";
 import { cn } from "@/lib/utils";
+import { BorderBeam } from "./BorderBeam";
 
 interface SpotlightCardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   className?: string;
   spotlightColor?: string;
   borderGlow?: boolean;
+  withBorderBeam?: boolean;
+  beamDuration?: number;
 }
 
 export const SpotlightCard: React.FC<SpotlightCardProps> = ({
@@ -13,6 +16,8 @@ export const SpotlightCard: React.FC<SpotlightCardProps> = ({
   className,
   spotlightColor = "rgba(6, 182, 212, 0.15)",
   borderGlow = true,
+  withBorderBeam = false,
+  beamDuration = 10,
   ...props
 }) => {
   const divRef = useRef<HTMLDivElement>(null);
@@ -40,12 +45,17 @@ export const SpotlightCard: React.FC<SpotlightCardProps> = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        "relative overflow-hidden rounded-2xl border border-white/10 bg-[#0d111a]/70 backdrop-blur-xl transition-all duration-300",
-        borderGlow && "hover:border-cyan-500/40 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)]",
+        "relative overflow-hidden rounded-2xl border border-white/10 bg-[#0d111a]/75 backdrop-blur-xl transition-all duration-300",
+        borderGlow && "hover:border-cyan-500/40 hover:shadow-[0_0_30px_rgba(6,182,212,0.18)]",
         className
       )}
       {...props}
     >
+      {/* Optional Traveling Laser Border Beam */}
+      {withBorderBeam && (
+        <BorderBeam size={200} duration={beamDuration} colorFrom="#06b6d4" colorTo="#3b82f6" />
+      )}
+
       {/* Spotlight follower */}
       <div
         className="pointer-events-none absolute -inset-px transition-opacity duration-300"

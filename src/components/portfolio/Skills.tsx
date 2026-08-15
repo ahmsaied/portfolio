@@ -95,7 +95,7 @@ export const Skills = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <SpotlightCard className="p-8 h-full flex flex-col justify-between">
+              <SpotlightCard withBorderBeam beamDuration={10 + index * 2} className="p-8 h-full flex flex-col justify-between">
                 <div>
                   {/* Category Header */}
                   <div className="flex items-center justify-between mb-6">

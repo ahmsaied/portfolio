@@ -10,10 +10,14 @@ import Certificates from "@/components/portfolio/Certificates";
 import Contact from "@/components/portfolio/Contact";
 import Footer from "@/components/portfolio/Footer";
 import { ParticleBackground } from "@/components/portfolio/ParticleBackground";
+import { CursorGlow } from "@/components/portfolio/CursorGlow";
 import { Toaster } from "sonner";
 
 const Index = () => (
   <main className="min-h-screen bg-[#0a0d14] text-slate-100 relative overflow-hidden grid-pattern selection:bg-cyan-500/30 selection:text-cyan-200">
+    {/* Ambient Cursor Glow Tracker */}
+    <CursorGlow />
+
     {/* Canvas Constellation Particle System */}
     <ParticleBackground />
 

@@ -5,16 +5,20 @@ import {
   Linkedin,
   Mail,
   FileText,
-  Sparkles,
   Bot,
   Smartphone,
   Server,
   ArrowRight,
   Radio,
+  Sparkles,
+  Brain,
+  Code2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SiStackoverflow, SiMedium } from "@icons-pack/react-simple-icons";
+import { SiStackoverflow, SiMedium, SiPython, SiFlutter, SiDotnet, SiDocker } from "@icons-pack/react-simple-icons";
 import { TiltCard } from "./TiltCard";
+import { TypewriterText } from "./TypewriterText";
+import { BorderBeam } from "./BorderBeam";
 
 const socials = [
   { icon: Github, href: "https://github.com/ahmsaied", label: "GitHub" },
@@ -36,12 +40,19 @@ const socials = [
   { icon: Mail, href: "mailto:eng.ahm.saied@gmail.com", label: "Email" },
 ];
 
+const typewriterPhrases = [
+  "AI Engineer — Generative & Agentic AI",
+  "Flutter & .NET Full-Stack Developer",
+  "Telecom Infrastructure Specialist",
+  "LLM Agent & RAG Pipeline Developer",
+];
+
 export const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-28 pb-20 overflow-hidden">
       {/* Background Radial Glow Orbs */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-cyan-500/10 blur-[150px] pointer-events-none animate-pulse-glow" />
-      <div className="absolute bottom-10 right-10 w-[500px] h-[500px] rounded-full bg-blue-600/10 blur-[130px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-cyan-500/10 blur-[160px] pointer-events-none animate-pulse-glow" />
+      <div className="absolute bottom-10 right-10 w-[500px] h-[500px] rounded-full bg-blue-600/10 blur-[140px] pointer-events-none" />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
@@ -66,16 +77,17 @@ export const Hero = () => {
               Ahmed <span className="gradient-text-blue-cyan">Khedr</span>
             </h1>
 
-            {/* Title Subheading */}
-            <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-200 mb-6 flex items-center justify-center lg:justify-start gap-2 flex-wrap">
-              <span>AI Engineer</span>
-              <span className="text-cyan-400">•</span>
-              <span className="gradient-text-blue-cyan">Generative & Agentic AI</span>
+            {/* Dynamic Typewriter Title Subheading */}
+            <div className="text-lg sm:text-2xl lg:text-3xl font-bold text-slate-200 mb-6 h-12 flex items-center justify-center lg:justify-start">
+              <TypewriterText
+                phrases={typewriterPhrases}
+                className="gradient-text-blue-cyan"
+              />
             </div>
 
             {/* Short Bio */}
             <p className="text-slate-400 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-8 font-normal">
-              Designing autonomous AI Agents, RAG knowledge retrieval pipelines, & LLM systems. Experienced Flutter & .NET Full-Stack Engineer backed by 14+ years of telecommunications operations engineering.
+              Architecting autonomous AI Agent networks, RAG vector retrieval pipelines, & enterprise systems. Experienced Flutter & .NET Full-Stack Developer backed by 14+ years of telecom operations engineering.
             </p>
 
             {/* Glow CTA Buttons */}
@@ -86,7 +98,7 @@ export const Hero = () => {
                 className="rounded-full bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-400 text-white font-semibold shadow-[0_0_30px_rgba(6,182,212,0.35)] hover:shadow-[0_0_40px_rgba(6,182,212,0.55)] hover:scale-[1.02] transition-all border border-cyan-300/40 px-7"
               >
                 <a href="#projects" className="flex items-center gap-2">
-                  View Projects
+                  View Featured Projects
                   <ArrowRight size={18} />
                 </a>
               </Button>
@@ -132,10 +144,18 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
             className="lg:col-span-5 flex justify-center"
           >
-            <TiltCard className="w-full max-w-md">
-              <div className="relative flex flex-col items-center text-center">
-                {/* Glowing Avatar Container */}
+            <TiltCard className="w-full max-w-md relative overflow-hidden">
+              <BorderBeam size={220} duration={9} colorFrom="#06b6d4" colorTo="#3b82f6" />
+              
+              <div className="relative flex flex-col items-center text-center z-10">
+                {/* Glowing Avatar Container with Orbiting Ring */}
                 <div className="relative mb-6">
+                  {/* Orbiting ring background */}
+                  <div className="absolute -inset-4 rounded-full border border-cyan-500/20 animate-spin-slow pointer-events-none flex items-center justify-center">
+                    <div className="w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_10px_#06b6d4] absolute -top-1.5" />
+                    <div className="w-3 h-3 rounded-full bg-blue-500 shadow-[0_0_10px_#3b82f6] absolute -bottom-1.5" />
+                  </div>
+
                   <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-500 via-cyan-400 to-teal-400 blur-md opacity-75 animate-pulse-glow" />
                   <div className="relative w-36 h-36 sm:w-44 sm:h-44 rounded-full overflow-hidden border-2 border-cyan-400/50 bg-[#0a0d14]">
                     <img

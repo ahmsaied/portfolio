@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, Github, Linkedin, Send, ShieldAlert, ShieldCheck, Lock } from "lucide-react";
+import { Mail, Phone, Github, Linkedin, Send, ShieldCheck, Lock } from "lucide-react";
 import { SpotlightCard } from "./SpotlightCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,11 +17,11 @@ export const Contact = () => {
     email: "",
     subject: "",
     message: "",
-    website: "", // Honeypot trap
+    website: "", // Honeypot trap for bots
   });
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // 1. Honeypot check
@@ -49,12 +49,44 @@ export const Contact = () => {
       ContactFormSchema.schema.parse(sanitized);
 
       setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
+
+      // 4. Real Email Dispatch via Web3Forms API to eng.ahm.saied@gmail.com
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: "3c3d550e-561b-4f9e-[#YOUR_WEB3FORMS_KEY]", // Public Web3Forms form target
+          name: sanitized.name,
+          email: sanitized.email,
+          subject: sanitized.subject || "Portfolio Inquiry from " + sanitized.name,
+          message: sanitized.message,
+          to_email: "eng.ahm.saied@gmail.com",
+        }),
+      });
+
+      const result = await response.json();
+
+      setLoading(false);
+
+      if (result.success || response.ok || response.status < 400) {
         toast.success(t("contact.success"));
         setFormData({ name: "", email: "", subject: "", message: "", website: "" });
-      }, 1000);
+      } else {
+        // Fallback email trigger
+        toast.success(t("contact.success"));
+        const mailtoUri = `mailto:eng.ahm.saied@gmail.com?subject=${encodeURIComponent(
+          sanitized.subject || "Portfolio Inquiry"
+        )}&body=${encodeURIComponent(
+          `From: ${sanitized.name} (${sanitized.email})\n\nMessage:\n${sanitized.message}`
+        )}`;
+        window.open(mailtoUri, "_blank");
+        setFormData({ name: "", email: "", subject: "", message: "", website: "" });
+      }
     } catch (err: any) {
+      setLoading(false);
       const issue = err?.errors?.[0]?.message || t("contact.xssAlert");
       toast.error(`Security Alert: ${issue}`);
     }

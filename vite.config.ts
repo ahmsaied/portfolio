@@ -20,4 +20,42 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    chunkSizeWarningLimit: 800,
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          // Framer Motion — heavy animation library, separate chunk
+          if (id.includes("node_modules/framer-motion")) {
+            return "vendor-framer";
+          }
+          // Radix UI primitives — separate chunk
+          if (id.includes("node_modules/@radix-ui")) {
+            return "vendor-radix";
+          }
+          // Icon packs — large, rarely change
+          if (
+            id.includes("node_modules/lucide-react") ||
+            id.includes("node_modules/@icons-pack")
+          ) {
+            return "vendor-icons";
+          }
+          // Charts — optional heavy lib
+          if (id.includes("node_modules/recharts")) {
+            return "vendor-charts";
+          }
+          // React Query
+          if (id.includes("node_modules/@tanstack")) {
+            return "vendor-query";
+          }
+          // React core + all other node_modules → single vendor chunk
+          // (avoids circular dependency from separating react)
+          if (id.includes("node_modules/")) {
+            return "vendor";
+          }
+        },
+      },
+    },
+  },
 }));
+

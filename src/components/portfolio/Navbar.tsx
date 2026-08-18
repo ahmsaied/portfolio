@@ -21,27 +21,44 @@ export const Navbar = () => {
   ];
 
   useEffect(() => {
+    const sectionIds = ["about", "skills", "services", "projects", "experience", "certificates", "contact"];
+    // Cache section positions once, refresh on resize
+    let sectionRects: { id: string; top: number; bottom: number }[] = [];
+
+    const cacheSections = () => {
+      sectionRects = sectionIds.map((id) => {
+        const el = document.getElementById(id);
+        return el
+          ? { id, top: el.offsetTop, bottom: el.offsetTop + el.offsetHeight }
+          : { id, top: 0, bottom: 0 };
+      });
+    };
+
+    cacheSections();
+    window.addEventListener("resize", cacheSections, { passive: true });
+
+    let ticking = false;
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-
-      const sections = ["about", "skills", "services", "projects", "experience", "certificates", "contact"];
-      const scrollPos = window.scrollY + 200;
-
-      for (const section of sections) {
-        const el = document.getElementById(section);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPos >= top && scrollPos < top + height) {
-            setActiveSection(section);
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const scrollPos = window.scrollY + 200;
+        setScrolled(window.scrollY > 20);
+        for (const s of sectionRects) {
+          if (scrollPos >= s.top && scrollPos < s.bottom) {
+            setActiveSection(s.id);
             break;
           }
         }
-      }
+        ticking = false;
+      });
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", cacheSections);
+    };
   }, []);
 
   return (

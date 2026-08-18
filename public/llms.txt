@@ -1,0 +1,101 @@
+# Ahmed Khedr — AI Engineer & Full-Stack Architect
+
+> AI Engineer specializing in Generative AI, Agentic Systems, and Full-Stack development.
+> Based in Cairo, Egypt. Available for AI & software engineering projects.
+
+## About
+
+Ahmed Khedr is a Senior AI Engineer and Full-Stack Software Architect with 14+ years of engineering experience, based in Cairo, Egypt. He began his career in telecommunications infrastructure engineering at leading Egyptian providers (Telecom Egypt / WE and Orange Egypt / Mobinil), then transitioned into software engineering with a focus on AI systems and mobile/backend development.
+
+He specializes in building:
+- **Autonomous AI Agent networks** using LangChain and Python
+- **RAG (Retrieval-Augmented Generation)** knowledge pipelines with vector databases (Pinecone, ChromaDB)
+- **Generative AI** applications with LLM orchestration and prompt engineering
+- **Flutter mobile applications** using Clean BLoC Architecture (Android & iOS)
+- **.NET Core microservices** deployed on Azure with Docker and CI/CD pipelines
+
+He is currently employed as a Telecommunications Engineer at WE (Telecom Egypt) while actively developing AI and software engineering projects.
+
+## Technical Skills
+
+### AI & Machine Learning
+- Generative AI & Large Language Models (LLMs)
+- Agentic AI Frameworks (LangChain, LangGraph, AutoGen)
+- RAG (Retrieval-Augmented Generation) pipelines
+- Vector Databases: Pinecone, ChromaDB, FAISS
+- Prompt Engineering & Chain-of-Thought techniques
+- Python, FastAPI, OpenAI API, Anthropic API
+
+### Mobile Development
+- Flutter & Dart (Clean BLoC Architecture)
+- Android Native (Java)
+- Firebase (Auth, Firestore, Cloud Messaging)
+- Google Maps API integration
+- Real-time WebSocket chat systems
+- App Store & Google Play deployment
+
+### Backend & Cloud Engineering
+- .NET Core & C# Microservices
+- Docker containerization & orchestration
+- Azure Cloud Platform (App Services, Functions, Storage)
+- SQL Server & Entity Framework Core
+- RESTful API design
+- CI/CD pipelines (GitHub Actions, Azure DevOps)
+
+### Telecommunications
+- BSS/OSS enterprise systems
+- GSM & 3G radio network KPI analysis
+- Network infrastructure operations
+- Capacity planning & coverage optimization
+
+## Professional Experience
+
+**Telecommunications Engineer — WE (Telecom Egypt)**
+*2022 – Present, Cairo, Egypt*
+Overseeing telecommunication infrastructure operations, leading technical engineering teams, and optimizing BSS/OSS enterprise workflows across large-scale telecom environments in Egypt.
+
+**Flutter Developer (Part-Time) — Stormra Ltd**
+*2020 – 2022*
+Architected and delivered the "Habibi App" — a full-featured social platform featuring real-time socket chat, Google Maps location tracking, media streaming, and push notifications. Built with Flutter & BLoC Clean Architecture.
+
+**Network Planning Engineer — Orange Egypt (Mobinil)**
+*2015 – 2022, Cairo, Egypt*
+Radio network implementation, KPI telemetry analysis, capacity planning, and coverage quality optimization across GSM & 3G cellular infrastructure.
+
+## Notable Projects
+
+**AI Agent Assistant & RAG Framework**
+Autonomous Agentic AI system featuring multi-tool orchestration, vector database RAG knowledge retrieval, and custom execution pipelines using LangChain & Python. Demonstrates multi-agent coordination, tool use, and knowledge retrieval.
+
+**Generative AI Content Automation**
+Automated prompt engineering and content generation pipeline leveraging LLMs with automated filtering, template rendering, and quality checks. Built with Python, OpenAI API, FastAPI.
+
+**Habibi Social App**
+Production-grade mobile social platform with real-time messaging, Google Maps location integration, push notifications, and media sharing. Built using Flutter & BLoC Clean Architecture with Firebase backend.
+
+**.NET Microservices Cloud Platform**
+High-throughput enterprise backend using .NET Core microservices, containerized with Docker, deployed on Azure with automated CI/CD pipelines.
+
+## Certifications & Credentials
+
+- Android Developer Nanodegree — Udacity
+- DevRel / TOT Egypt Attendance — TOT Egypt
+- Russian Cultural Center Certificate — Russian Cultural Center, Cairo
+
+## Contact & Links
+
+- **Email**: eng.ahm.saied@gmail.com
+- **GitHub**: https://github.com/ahmsaied
+- **LinkedIn**: https://www.linkedin.com/in/ahmsaied/
+- **Stack Overflow**: https://stackoverflow.com/users/9513914/ahmed-saied
+- **Medium**: https://medium.com/@ahm.saied
+- **Portfolio**: https://ahmedkhedr-delta.vercel.app
+
+## Languages
+
+- Arabic (Native)
+- English (Professional)
+
+## Location & Availability
+
+Cairo, Egypt — Available remotely worldwide for AI engineering, software architecture consulting, and full-stack development projects.

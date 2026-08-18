@@ -1,23 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
 export const CursorGlow: React.FC = () => {
-  const [position, setPosition] = useState({ x: -100, y: -100 });
+  const glowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setPosition({ x: e.clientX, y: e.clientY });
+    let rafId: number | null = null;
+    let latestX = -1000;
+    let latestY = -1000;
+
+    const updateGlow = () => {
+      if (glowRef.current) {
+        glowRef.current.style.background = `radial-gradient(600px circle at ${latestX}px ${latestY}px, rgba(6, 182, 212, 0.08), transparent 80%)`;
+      }
+      rafId = null;
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    const handleMouseMove = (e: MouseEvent) => {
+      latestX = e.clientX;
+      latestY = e.clientY;
+      if (!rafId) {
+        rafId = requestAnimationFrame(updateGlow);
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   return (
     <div
+      ref={glowRef}
       className="pointer-events-none fixed inset-0 z-30 transition-opacity duration-300 hidden md:block"
-      style={{
-        background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(6, 182, 212, 0.08), transparent 80%)`,
-      }}
     />
   );
 };

@@ -52,7 +52,11 @@ export const ParticleBackground: React.FC = () => {
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("touchmove", handleTouchMove);
 
-    const particleCount = Math.min(Math.floor((width * height) / 14000), 75);
+    // Fewer particles on mobile/small screens to save CPU
+    const isMobile = width < 768;
+    const particleCount = isMobile
+      ? Math.min(Math.floor((width * height) / 20000), 30)
+      : Math.min(Math.floor((width * height) / 14000), 75);
     const particles: Particle[] = [];
     const colors = ["#06b6d4", "#3b82f6", "#60a5fa", "#38bdf8"];
 
@@ -90,12 +94,14 @@ export const ParticleBackground: React.FC = () => {
         ctx.globalAlpha = p.alpha;
         ctx.fill();
 
-        // Connect to mouse if close
+        // Connect to mouse if close — use squared distance to avoid Math.sqrt
         const dxMouse = mouse.x - p.x;
         const dyMouse = mouse.y - p.y;
-        const distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
+        const distMouseSq = dxMouse * dxMouse + dyMouse * dyMouse;
+        const mouseRadiusSq = mouse.radius * mouse.radius;
 
-        if (distMouse < mouse.radius) {
+        if (distMouseSq < mouseRadiusSq) {
+          const distMouse = Math.sqrt(distMouseSq); // sqrt only when needed
           const force = (1 - distMouse / mouse.radius) * 0.15;
           p.x -= (dxMouse / distMouse) * force * 5;
           p.y -= (dyMouse / distMouse) * force * 5;
@@ -109,14 +115,16 @@ export const ParticleBackground: React.FC = () => {
           ctx.stroke();
         }
 
-        // Connect to nearby particles
+        // Connect to nearby particles — squared distance check first
+        const connectDistSq = 110 * 110;
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
           const dx = p.x - p2.x;
           const dy = p.y - p2.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          const distSq = dx * dx + dy * dy;
 
-          if (dist < 110) {
+          if (distSq < connectDistSq) {
+            const dist = Math.sqrt(distSq); // sqrt only when we know it's close
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
